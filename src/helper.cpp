@@ -1,8 +1,9 @@
 #include "helper.hpp"
 
+std::vector<std::string> Commands = { "echo", "type", "exit" };
 
 // Helper Function to check a Vector
-inline bool contains(const std::vector<std::string>& v, const std::string& s) {
+bool contains(const std::vector<std::string>& v, const std::string& s) {
 	return std::find(v.begin(), v.end(), s) != v.end();
 }
 

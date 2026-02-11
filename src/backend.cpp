@@ -2,7 +2,7 @@
 
 
 // To check if a Function is available in the Path Var
-bool checkInPath(const std::string& command)
+bool checkInPath(std::string command)
 {
 
 #ifdef _WIN32
@@ -68,7 +68,7 @@ bool checkInPath(const std::string& command)
             access(full_path.c_str(), X_OK) == 0)
         {
             std::cout << command << " is "
-                << fs::absolute(full_path) << "\n";
+                << fs::absolute(full_path).string() << "\n";
             return true;
         }
     }
