@@ -57,7 +57,7 @@ int shell() {
 			{
 				if (input[o] == '\'')
 				{
-					firstquote != firstquote;
+					firstquote = !firstquote;
 				}
 				else
 				{
