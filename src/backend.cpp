@@ -176,3 +176,31 @@ bool changeDirectory(const std::string& path)
     }
     return true;
 }
+
+
+bool changeToHome()
+{
+#ifdef _WIN32
+    const char* home = std::getenv("USERPROFILE");
+#else
+    const char* home = std::getenv("HOME");
+#endif
+
+    if (!home)
+    {
+        std::cerr << "Home not found\n";
+        return false;
+    }
+
+#ifdef _WIN32
+    if (_chdir(home) != 0)
+#else
+    if (chdir(home) != 0)
+#endif
+    {
+        perror("cd");
+        return false;
+    }
+
+    return true;
+}

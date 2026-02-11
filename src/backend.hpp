@@ -37,3 +37,6 @@ bool runProcess(const std::vector<std::string>& args);
 // Function to change the current Directory,
 // returns true if successful
 bool changeDirectory(const std::string& path);
+
+// Change to the Home Directory, returns true if successful
+bool changeToHome();

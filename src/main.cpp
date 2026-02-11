@@ -71,9 +71,7 @@ int shell() {
 		{
 			if (words[1] == "~")
 			{
-				const char* home = std::getenv("USERPROFILE");
-				
-				changeDirectory(home);
+				changeToHome();
 			}
 
 			else {
