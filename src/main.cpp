@@ -67,7 +67,11 @@ int shell() {
 					}
 					else
 					{
-						if (lastChar != ' ')
+						if (lastChar == ' ' && input[o] == ' ')
+						{
+							continue;
+						}
+						else
 						{
 							std::cout << input[o];
 						}
