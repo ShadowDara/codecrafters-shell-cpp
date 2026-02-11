@@ -66,11 +66,11 @@ int shell() {
 		{
 			if (contains(Commands, words[1]))
 			{
-				std::cout << words[1] << " is a shell builtin";
+				std::cout << words[1] << " is a shell builtin\n";
 			}
 			else
 			{
-				std::cout << words[1] << ": not found";
+				std::cout << words[1] << ": not found\n";
 			}
 		}
 
