@@ -1,9 +1,22 @@
+// Implementation of a Shell in C++
+
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
 
-int main(int argc, char* argv[]) {
+
+std::vector<std::string> Commands = { "echo", "type", "exit" };
+
+
+// Helper Function to check a Vector
+bool contains(const std::vector<std::string>& v, const std::string& s) {
+	return std::find(v.begin(), v.end(), s) != v.end();
+}
+
+
+// Shell Function
+int shell() {
 	// Flush after every std::cout / std:cerr
 	std::cout << std::unitbuf;
 	std::cerr << std::unitbuf;
@@ -48,10 +61,30 @@ int main(int argc, char* argv[]) {
 			std::cout << "\n";
 		}
 
+		// Type Command
+		else if (words[0] == "type")
+		{
+			if (contains(Commands, words[1]))
+			{
+				std::cout << words[1] << " is a shell builtin";
+			}
+			else
+			{
+				std::cout << words[1] << ": not found";
+			}
+		}
+
 		// Default
 		else
 		{
 			std::cout << input << ": command not found\n";
 		}
 	}
+}
+
+
+// Main Function
+int main(int argc, char* argv[])
+{
+	return shell();
 }
