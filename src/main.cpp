@@ -80,6 +80,8 @@ int shell() {
 			std::cout << input << ": command not found\n";
 		}
 	}
+
+	return 0;
 }
 
 
