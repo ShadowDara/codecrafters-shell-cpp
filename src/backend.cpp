@@ -1,13 +1,18 @@
 #include "backend.hpp"
 
 
+bool hasExtension(const std::string& cmd)
+{
+    return cmd.find('.') != std::string::npos;
+}
+
+
 // To check if a Function is available in the Path Var
 bool checkInPath(std::string command)
 {
 
 #ifdef _WIN32
     // ---------------- WINDOWS ----------------
-
     char buffer[32767];
 
     DWORD len = GetEnvironmentVariableA("PATH", buffer, sizeof(buffer));
@@ -26,24 +31,31 @@ bool checkInPath(std::string command)
 
     for (const auto& dir : paths)
     {
-        // If command already has extension
-        fs::path direct = fs::path(dir) / command;
-        if (fs::exists(direct) && fs::is_regular_file(direct))
-        {
-            std::cout << command << " is "
-                << fs::absolute(direct) << "\n";
-            return true;
-        }
+        fs::path base = fs::path(dir);
 
-        for (const auto& ext : exts)
+        // Wenn command bereits Extension hat
+        if (hasExtension(command))
         {
-            fs::path full_path = fs::path(dir) / (command + ext);
-
-            if (fs::exists(full_path) && fs::is_regular_file(full_path))
+            fs::path full = base / command;
+            if (fs::exists(full) && fs::is_regular_file(full))
             {
                 std::cout << command << " is "
-                    << fs::absolute(full_path) << "\n";
+                    << fs::absolute(full) << "\n";
                 return true;
+            }
+        }
+        else
+        {
+            for (const auto& ext : exts)
+            {
+                fs::path full = base / (command + ext);
+
+                if (fs::exists(full) && fs::is_regular_file(full))
+                {
+                    std::cout << command << " is "
+                        << fs::absolute(full) << "\n";
+                    return true;
+                }
             }
         }
     }

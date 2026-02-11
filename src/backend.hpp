@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <filesystem>
+#include <algorithm>
 
 namespace fs = std::filesystem;
 
@@ -16,6 +17,9 @@ namespace fs = std::filesystem;
 	#include <cstdlib>
 	#include <unistd.h>
 #endif
+
+
+bool hasExtension(const std::string& cmd);
 
 bool checkInPath(std::string command);
 
