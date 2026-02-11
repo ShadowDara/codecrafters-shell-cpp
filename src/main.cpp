@@ -69,7 +69,16 @@ int shell() {
 		// Change Directory
 		else if (words[0] == "cd")
 		{
-			changeDirectory(words[1]);
+			if (words[1] == "~")
+			{
+				const char* home = std::getenv("USERPROFILE");
+				
+				changeDirectory(home);
+			}
+
+			else {
+				changeDirectory(words[1]);
+			}
 		}
 
 		// Type Command
