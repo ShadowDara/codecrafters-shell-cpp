@@ -95,7 +95,6 @@ std::string getExecutablePath(std::string command)
 bool runProcess(const std::vector<std::string>& args)
 {
 #ifdef _WIN32
-
     std::string commandLine;
 
     for (const auto& arg : args)
@@ -159,5 +158,25 @@ bool runProcess(const std::vector<std::string>& args)
         perror("fork failed");
         return false;
     }
+#endif
+}
+
+
+bool changeDirectory(const std::string& path)
+{
+#ifdef _WIN32
+    if (_chdir(path.c_str()) != 0)
+    {
+        std::cerr << "cd failed\n";
+        return false;
+    }
+    return true;
+#else
+    if (chdir(path.c_str()) != 0)
+    {
+        perror("cd failed");
+        return false;
+    }
+    return true;
 #endif
 }

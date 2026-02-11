@@ -60,9 +60,16 @@ int shell() {
 			std::cout << "\n";
 		}
 
+		// View the current Directory
 		else if (words[0] == "pwd")
 		{
 			std::cout << fs::current_path().string() << "\n";
+		}
+
+		// Change Directory
+		else if (words[0] == "cd")
+		{
+			changeDirectory(words[1]);
 		}
 
 		// Type Command

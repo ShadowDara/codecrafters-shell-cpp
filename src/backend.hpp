@@ -13,6 +13,7 @@ namespace fs = std::filesystem;
 // Windows
 #ifdef _WIN32
 	#include <windows.h>
+	#include <direct.h>
 #else
 	#include <cstdlib>
 	#include <unistd.h>
@@ -32,3 +33,7 @@ std::string getExecutablePath(std::string command);
 // Start a Process with the given Arguments, returns true if successful
 // For Linux and Windows
 bool runProcess(const std::vector<std::string>& args);
+
+// Function to change the current Directory,
+// returns true if successful
+bool changeDirectory(const std::string& path);
