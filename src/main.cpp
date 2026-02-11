@@ -14,8 +14,13 @@ int main(int argc, char* argv[]) {
 		std::string input;
 		std::getline(std::cin, input);
 
-		std::cout << input << ": command not found";
-
-		std::cout << "\n";
+		if (input == "exit")
+		{
+			break;
+		}
+		else
+		{
+			std::cout << input << ": command not found\n";
+		}
 	}
 }
