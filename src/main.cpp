@@ -50,6 +50,7 @@ int shell() {
 		else if (words[0] == "echo")
 		{
 			bool firstquote = false;
+			char lastChar = '0';
 
 			for (size_t o = 5; o < input.size(); o++)
 			{
@@ -60,8 +61,20 @@ int shell() {
 				}
 				else
 				{
-					std::cout << input[o];
+					if (firstquote)
+					{ 
+						std::cout << input[o];
+					}
+					else
+					{
+						if (lastChar != ' ')
+						{
+							std::cout << input[o];
+						}
+					}
 				}
+
+				lastChar = input[o];
 			}
 
 			std::cout << "\n";
