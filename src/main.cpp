@@ -57,7 +57,6 @@ int shell() {
 				if (input[o] == '\'')
 				{
 					firstquote != firstquote;
-					continue;
 				}
 				else
 				{
@@ -69,7 +68,7 @@ int shell() {
 					{
 						if (lastChar == ' ' && input[o] == ' ')
 						{
-							continue;
+
 						}
 						else
 						{
