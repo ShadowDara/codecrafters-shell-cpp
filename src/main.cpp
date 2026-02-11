@@ -17,8 +17,8 @@
 // Shell Function
 int shell() {
 	// Flush after every std::cout / std:cerr
-	std::cout << std::unitbuf;
-	std::cerr << std::unitbuf;
+	//std::cout << std::unitbuf;
+	//std::cerr << std::unitbuf;
 
 	// TODO: Uncomment the code below to pass the first stage
 	while (true)
@@ -49,14 +49,21 @@ int shell() {
 		// Echo Command
 		else if (words[0] == "echo")
 		{
-			for (size_t i = 1; i < words.size(); ++i)
+			bool firstquote = false;
+
+			for (size_t o = 5; o < input.size(); o++)
 			{
-				std::cout << words[i];
-				if (i < words.size() - 1)
+				if (input[o] == '\'')
 				{
-					std::cout << " ";
+					firstquote != firstquote;
+					continue;
+				}
+				else
+				{
+					std::cout << input[o];
 				}
 			}
+
 			std::cout << "\n";
 		}
 
