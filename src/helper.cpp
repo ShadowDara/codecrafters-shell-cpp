@@ -1,6 +1,7 @@
 #include "helper.hpp"
 
-std::vector<std::string> Commands = { "echo", "type", "exit" };
+std::vector<std::string> Commands =
+{ "echo", "pwd", "type", "exit" };
 
 // Helper Function to check a Vector
 bool contains(const std::vector<std::string>& v, const std::string& s) {

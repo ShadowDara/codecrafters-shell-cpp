@@ -9,6 +9,11 @@
 #include "backend.hpp"
 
 
+// Would be cool to add
+// ls
+// mkdir
+
+
 // Shell Function
 int shell() {
 	// Flush after every std::cout / std:cerr
@@ -53,6 +58,11 @@ int shell() {
 				}
 			}
 			std::cout << "\n";
+		}
+
+		else if (words[0] == "pwd")
+		{
+			std::cout << fs::current_path().string() << "\n";
 		}
 
 		// Type Command
