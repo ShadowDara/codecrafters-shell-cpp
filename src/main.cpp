@@ -15,5 +15,7 @@ int main(int argc, char* argv[]) {
 		std::getline(std::cin, input);
 
 		std::cout << input << ": command not found";
+
+		std::cout << "\n";
 	}
 }
