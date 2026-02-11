@@ -56,25 +56,25 @@ int shell() {
 		}
 
 		// Type Command
-		else if (words[0] == "type")
-		{
-			// Check for builtin Commands
-			if (contains(Commands, words[1]))
-			{
-				std::cout << words[1] << " is a shell builtin\n";
-			}
+		//else if (words[0] == "type")
+		//{
+		//	// Check for builtin Commands
+		//	if (contains(Commands, words[1]))
+		//	{
+		//		std::cout << words[1] << " is a shell builtin\n";
+		//	}
 
-			else if (checkInPath(words[1]))
-			{
-				//std::cout << words[1] << " is " << ;
-			}
+		//	else if (checkInPath(words[1]))
+		//	{
+		//		//std::cout << words[1] << " is " << ;
+		//	}
 
-			// Others
-			else
-			{
-				std::cout << words[1] << ": not found\n";
-			}
-		}
+		//	// Others
+		//	else
+		//	{
+		//		std::cout << words[1] << ": not found\n";
+		//	}
+		//}
 
 		// Default
 		else
