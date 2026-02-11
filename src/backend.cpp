@@ -166,17 +166,13 @@ bool changeDirectory(const std::string& path)
 {
 #ifdef _WIN32
     if (_chdir(path.c_str()) != 0)
-    {
-        std::cerr << "cd failed\n";
-        return false;
-    }
-    return true;
 #else
     if (chdir(path.c_str()) != 0)
+#endif
     {
-        perror("cd failed");
+        std::cerr << "cd: " << path << ": ";
+        perror("");
         return false;
     }
     return true;
-#endif
 }
