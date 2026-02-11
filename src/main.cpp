@@ -51,6 +51,7 @@ int shell() {
 		{
 			bool firstquote = false;
 			char lastChar = '0';
+			std::string output = "";
 
 			for (size_t o = 5; o < input.size(); o++)
 			{
@@ -62,7 +63,7 @@ int shell() {
 				{
 					if (firstquote)
 					{ 
-						std::cout << input[o];
+						output += input[o];
 					}
 					else
 					{
@@ -72,7 +73,7 @@ int shell() {
 						}
 						else
 						{
-							std::cout << input[o];
+							output += input[o];
 						}
 					}
 				}
@@ -80,7 +81,7 @@ int shell() {
 				lastChar = input[o];
 			}
 
-			std::cout << "\n";
+			std::cout << output << "\n";
 		}
 
 		// View the current Directory
