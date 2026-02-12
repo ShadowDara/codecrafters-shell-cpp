@@ -30,7 +30,7 @@ std::vector<std::string> Shell::parseLine(std::string line)
 
 		// Check for Single Quotes
 		// but only if Double Quotes are not active
-		else if (doubleQuote && '\'' == line[i])
+		else if (!doubleQuote && '\'' == line[i])
 		{
 			firstQuote = !firstQuote;
 		}
