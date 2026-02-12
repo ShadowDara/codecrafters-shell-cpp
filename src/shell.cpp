@@ -14,8 +14,11 @@ std::vector<std::string> Shell::parseLine(std::string line)
 	// Parse by character
 
 	std::string word = "";
-	bool firstQuote = false;
 	char lastChar = '0';
+
+	// Double Quotes are more important than single Quotes
+	bool doubleQuote = false;
+	bool firstQuote = false;
 
 	for (size_t i = 0; i < line.size(); i++)
 	{
@@ -33,8 +36,11 @@ std::vector<std::string> Shell::parseLine(std::string line)
 				word.clear();
 			}
 		}
+
 		else
 		{
+			word += line[i];
+			/*
 			if (firstQuote)
 			{
 				word += line[i];
@@ -50,6 +56,7 @@ std::vector<std::string> Shell::parseLine(std::string line)
 					word += line[i];
 				}
 			}
+			*/
 		}
 	}
 
