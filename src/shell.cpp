@@ -35,7 +35,7 @@ std::vector<std::string> Shell::parseLine(std::string line)
 			firstQuote = !firstQuote;
 		}
 
-		else if (!firstQuote && ' ' == line[i])
+		else if (!doubleQuote && !firstQuote && ' ' == line[i])
 		{
 			if (!word.empty())
 			{
