@@ -22,8 +22,15 @@ std::vector<std::string> Shell::parseLine(std::string line)
 
 	for (size_t i = 0; i < line.size(); i++)
 	{
+		// Check for Double Quotes
+		if ('"' == line[i])
+		{
+			doubleQuote = !doubleQuote;
+		}
+
 		// Check for Single Quotes
-		if ('\'' == line[i])
+		// but only if Double Quotes are not active
+		else if (doubleQuote && '\'' == line[i])
 		{
 			firstQuote = !firstQuote;
 		}
@@ -40,23 +47,6 @@ std::vector<std::string> Shell::parseLine(std::string line)
 		else
 		{
 			word += line[i];
-			/*
-			if (firstQuote)
-			{
-				word += line[i];
-			}
-			else
-			{
-				if (lastChar == ' ' && line[i] == ' ')
-				{
-					// Do nothing here
-				}
-				else
-				{
-					word += line[i];
-				}
-			}
-			*/
 		}
 	}
 
