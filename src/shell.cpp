@@ -27,7 +27,7 @@ std::vector<std::string> Shell::parseLine(std::string line)
 
 		else if (!firstQuote && ' ' == line[i])
 		{
-			if (word != " ")
+			if (word != " " || word != "")
 			{
 				tokens.push_back(word);
 				word = "";
