@@ -27,10 +27,10 @@ std::vector<std::string> Shell::parseLine(std::string line)
 
 		else if (!firstQuote && ' ' == line[i])
 		{
-			if (word != " " || word != "")
+			if (!word.empty())
 			{
 				tokens.push_back(word);
-				word = "";
+				word.clear();
 			}
 		}
 		else
@@ -54,7 +54,11 @@ std::vector<std::string> Shell::parseLine(std::string line)
 	}
 
 	// Add the Last Word ofc
-	tokens.push_back(word);
+	// letztes Wort
+	if (!word.empty())
+	{
+		tokens.push_back(word);
+	}
 
 	return tokens;
 }
