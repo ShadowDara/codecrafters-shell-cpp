@@ -19,14 +19,19 @@ std::vector<std::string> Shell::parseLine(std::string line)
 
 	for (size_t i = 0; i < line.size(); i++)
 	{
+		// Check for Single Quotes
 		if ('\'' == line[i])
 		{
 			firstQuote = !firstQuote;
 		}
+
 		else if (!firstQuote && ' ' == line[i])
 		{
-			tokens.push_back(word);
-			word = "";
+			if (word != " ")
+			{
+				tokens.push_back(word);
+				word = "";
+			}
 		}
 		else
 		{
@@ -38,7 +43,7 @@ std::vector<std::string> Shell::parseLine(std::string line)
 			{
 				if (lastChar == ' ' && line[i] == ' ')
 				{
-
+					// Do nothing here
 				}
 				else
 				{
