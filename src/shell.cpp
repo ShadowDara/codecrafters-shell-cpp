@@ -25,6 +25,7 @@ std::vector<std::string> Shell::parseLine(std::string line)
 		// ESCAPE
 		if (line[i] == '\\')
 		{
+			// Skip the next Character
 			if (i + 1 < line.size())
 			{
 				word += line[i + 1];
