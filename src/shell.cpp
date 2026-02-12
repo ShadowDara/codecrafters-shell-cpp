@@ -58,6 +58,9 @@ std::vector<std::string> Shell::parseLine(std::string line)
 		{
 			word += line[i];
 		}
+
+		// Update the Last Char at the End
+		lastChar = line[i];
 	}
 
 	// Add the Last Word ofc
