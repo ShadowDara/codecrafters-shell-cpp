@@ -58,6 +58,7 @@ bool checkInPath(std::string command)
 std::string getExecutablePath(std::string command)
 {
 #ifdef _WIN32
+
     char fullPath[MAX_PATH];
     DWORD result = SearchPathA(
         NULL,                 // PATH durchsuchen
@@ -71,8 +72,10 @@ std::string getExecutablePath(std::string command)
     {
         return std::string(fullPath);
     }
-	return "";
+    return "";
+
 #else
+
     const char* path_env = std::getenv("PATH");
     if (!path_env)
         return "";
@@ -88,6 +91,7 @@ std::string getExecutablePath(std::string command)
         }
     }
 	return "";
+
 #endif
 }
 
@@ -95,6 +99,7 @@ std::string getExecutablePath(std::string command)
 bool runProcess(const std::vector<std::string>& args)
 {
 #ifdef _WIN32
+
     std::string commandLine;
 
     for (const auto& arg : args)
@@ -130,7 +135,9 @@ bool runProcess(const std::vector<std::string>& args)
     CloseHandle(pi.hThread);
 
     return true;
+
 #else
+
     pid_t pid = fork();
 
     if (pid == 0)  // Child
@@ -158,6 +165,7 @@ bool runProcess(const std::vector<std::string>& args)
         perror("fork failed");
         return false;
     }
+
 #endif
 }
 

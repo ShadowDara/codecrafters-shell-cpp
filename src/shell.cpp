@@ -1,21 +1,62 @@
-﻿// Implementation of a Shell in C++
-
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
-
-#include "helper.hpp"
-#include "backend.hpp"
+#include "shell.hpp"
 
 
-// Would be cool to add
-// ls
-// mkdir
+// Function to parse the Input Line
+std::vector<std::string> Shell::parseLine(std::string line)
+{
+	std::vector<std::string> tokens;
+
+	//while (ss >> word) {   // trennt automatisch nach whitespace
+	//	tokens.push_back(word);
+	//}
+
+	// Change:
+	// Parse by character
+
+	std::string word = "";
+	bool firstQuote = false;
+	char lastChar = '0';
+
+	for (size_t i = 0; i < line.size(); i++)
+	{
+		if ('\'' == line[i])
+		{
+			firstQuote = !firstQuote;
+		}
+		else if (!firstQuote && ' ' == line[i])
+		{
+			tokens.push_back(word);
+			word = "";
+		}
+		else
+		{
+			if (firstQuote)
+			{
+				word += line[i];
+			}
+			else
+			{
+				if (lastChar == ' ' && line[i] == ' ')
+				{
+
+				}
+				else
+				{
+					word += line[i];
+				}
+			}
+		}
+	}
+
+	// Add the Last Word ofc
+	tokens.push_back(word);
+
+	return tokens;
+}
 
 
 // Shell Function
-int shell() {
+int Shell::run() {
 	// Flush after every std::cout / std:cerr
 	//std::cout << std::unitbuf;
 	//std::cerr << std::unitbuf;
@@ -28,17 +69,18 @@ int shell() {
 		std::string input;
 		std::getline(std::cin, input);
 
-		std::stringstream ss(input);
-		std::string word;
 		std::vector<std::string> words;
 
-		while (ss >> word) {   // trennt automatisch nach whitespace
-			words.push_back(word);
-		}
+		words = parseLine(input);
 
 		/*for (const auto& w : words) {
 			std::cout << w << std::endl;
 		}*/
+
+		//
+		// TODO
+		// Parser for " and '
+		//
 
 		// Leave the Shell
 		if (words[0] == "exit")
@@ -49,39 +91,16 @@ int shell() {
 		// Echo Command
 		else if (words[0] == "echo")
 		{
-			bool firstquote = false;
-			char lastChar = '0';
 			std::string output = "";
 
-			for (size_t o = 5; o < input.size(); o++)
+			for (size_t i = 1; i < words.size(); i++)
 			{
-				if (input[o] == '\'')
-				{
-					firstquote = !firstquote;
-				}
-				else
-				{
-					if (firstquote)
-					{ 
-						output += input[o];
-					}
-					else
-					{
-						if (lastChar == ' ' && input[o] == ' ')
-						{
-
-						}
-						else
-						{
-							output += input[o];
-						}
-					}
-				}
-
-				lastChar = input[o];
+				output += words[i] + " ";
 			}
 
-			std::cout << output << "\n";
+			output += "\n";
+
+			std::cout << output;
 		}
 
 		// View the current Directory
@@ -114,7 +133,7 @@ int shell() {
 
 			else if (checkInPath(words[1]))
 			{
-				std::cout << words[1] << " is " 
+				std::cout << words[1] << " is "
 					<< getExecutablePath(words[1]) << "\n";
 			}
 
@@ -140,11 +159,4 @@ int shell() {
 	}
 
 	return 0;
-}
-
-
-// Main Function
-int main(int argc, char* argv[])
-{
-	return shell();
 }
