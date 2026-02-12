@@ -22,45 +22,44 @@ std::vector<std::string> Shell::parseLine(std::string line)
 
 	for (size_t i = 0; i < line.size(); i++)
 	{
-		// Escape Backslash
-		if ('\\' == lastChar)
+		// ESCAPE
+		if (line[i] == '\\')
 		{
-			word += line[i];
+			if (i + 1 < line.size())
+			{
+				word += line[i + 1];
+				i++;
+			}
+			continue;
 		}
 
-		// Check for Double Quotes
-		else if ('"' == line[i])
+		// DOUBLE QUOTE
+		if (line[i] == '"' && !firstQuote)
 		{
 			doubleQuote = !doubleQuote;
+			continue;
 		}
 
-		// Check for Single Quotes
-		// but only if Double Quotes are not active
-		else if (!doubleQuote && '\'' == line[i])
+		// SINGLE QUOTE
+		if (line[i] == '\'' && !doubleQuote)
 		{
 			firstQuote = !firstQuote;
+			continue;
 		}
 
-		// Either Single or Double Quotes
-		else if (!doubleQuote && !firstQuote)
+		// SPACE OUTSIDE QUOTES
+		if (!doubleQuote && !firstQuote && line[i] == ' ')
 		{
-			if (' ' == line[i])
+			if (!word.empty())
 			{
-				if (!word.empty())
-				{
-					tokens.push_back(word);
-					word.clear();
-				}
+				tokens.push_back(word);
+				word.clear();
 			}
+			continue;
 		}
 
-		else
-		{
-			word += line[i];
-		}
-
-		// Update the Last Char at the End
-		lastChar = line[i];
+		// NORMAL CHAR
+		word += line[i];
 	}
 
 	// Add the Last Word ofc
