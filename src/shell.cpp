@@ -34,8 +34,20 @@ std::vector<std::string> Shell::parseLine(std::string line)
 			continue;
 		}
 
+		// ESCAPE 2
+		if (line[i] == '\\')
+		{
+			// Skip the next Character
+			if (i + 1 < line.size())
+			{
+				word += line[i + 1];
+				i++;
+			}
+			continue;
+		}
+
 		// DOUBLE QUOTE
-		else if (line[i] == '"' && !singleQuote)
+		if (line[i] == '"' && !singleQuote)
 		{
 			doubleQuote = !doubleQuote;
 			continue;
