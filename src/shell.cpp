@@ -23,7 +23,6 @@ std::vector<std::string> Shell::parseLine(std::string line)
 	for (size_t i = 0; i < line.size(); i++)
 	{
 		// ESCAPE
-		// ESCAPE
 		if (line[i] == '\\')
 		{
 			if (doubleQuote)
@@ -134,6 +133,46 @@ int Shell::run() {
 		// Echo Command
 		else if (words[0] == "echo")
 		{
+			// Check if the Second argument is
+			// > or 1> to write to a File
+			if (words[2] == ">")
+			{ 
+				std::string filename = words[3];
+				std::ofstream file(filename);
+
+				if (!file)
+				{
+					std::cerr << "Fehler beim Öffnen der Datei\n";
+					return 1;
+				}
+
+				file << words[1];
+
+				file.close();
+
+				// Skip here
+				continue;
+			}
+			
+			if (words[2] == "1>")
+			{
+				std::string filename = words[3];
+				std::ofstream file(filename);
+
+				if (!file)
+				{
+					std::cerr << "Fehler beim Öffnen der Datei\n";
+					return 1;
+				}
+
+				file << words[1];
+
+				file.close();
+
+				// Skip here
+				continue;
+			}
+
 			std::string output = "";
 
 			for (size_t i = 1; i < words.size(); i++)
