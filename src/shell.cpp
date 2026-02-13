@@ -35,7 +35,7 @@ std::vector<std::string> Shell::parseLine(std::string line)
 		}
 
 		// DOUBLE QUOTE
-		if (line[i] == '"' && !singleQuote)
+		else if (line[i] == '"' && !singleQuote)
 		{
 			doubleQuote = !doubleQuote;
 			continue;
