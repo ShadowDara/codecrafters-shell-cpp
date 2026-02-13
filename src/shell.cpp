@@ -18,12 +18,12 @@ std::vector<std::string> Shell::parseLine(std::string line)
 
 	// Double Quotes are more important than single Quotes
 	bool doubleQuote = false;
-	bool firstQuote = false;
+	bool singleQuote = false;
 
 	for (size_t i = 0; i < line.size(); i++)
 	{
 		// ESCAPE
-		if (!doubleQuote && !firstQuote && line[i] == '\\')
+		if (!doubleQuote && !singleQuote && line[i] == '\\')
 		{
 			// Skip the next Character
 			if (i + 1 < line.size())
@@ -35,7 +35,7 @@ std::vector<std::string> Shell::parseLine(std::string line)
 		}
 
 		// DOUBLE QUOTE
-		if (line[i] == '"' && !firstQuote)
+		if (line[i] == '"' && !singleQuote)
 		{
 			doubleQuote = !doubleQuote;
 			continue;
@@ -44,12 +44,12 @@ std::vector<std::string> Shell::parseLine(std::string line)
 		// SINGLE QUOTE
 		if (line[i] == '\'' && !doubleQuote)
 		{
-			firstQuote = !firstQuote;
+			singleQuote = !singleQuote;
 			continue;
 		}
 
 		// SPACE OUTSIDE QUOTES
-		if (!doubleQuote && !firstQuote && line[i] == ' ')
+		if (!doubleQuote && !singleQuote && line[i] == ' ')
 		{
 			if (!word.empty())
 			{
