@@ -23,7 +23,7 @@ std::vector<std::string> Shell::parseLine(std::string line)
 	for (size_t i = 0; i < line.size(); i++)
 	{
 		// ESCAPE
-		if (!doubleQuote && line[i] == '\\')
+		if (!doubleQuote && !firstQuote && line[i] == '\\')
 		{
 			// Skip the next Character
 			if (i + 1 < line.size())
