@@ -23,14 +23,38 @@ std::vector<std::string> Shell::parseLine(std::string line)
 	for (size_t i = 0; i < line.size(); i++)
 	{
 		// ESCAPE
-		if (!doubleQuote && line[i] == '\\')
+		// ESCAPE
+		if (line[i] == '\\')
 		{
-			// Skip the next Character
-			if (i + 1 < line.size())
+			if (doubleQuote)
 			{
-				word += line[i + 1];
-				i++;
+				// in double quotes: nur bestimmte chars escapen
+				if (i + 1 < line.size() &&
+					(
+						line[i + 1] == '"' ||
+						line[i + 1] == '\\' ||
+						line[i + 1] == '$' ||
+						line[i + 1] == '`'
+					))
+				{
+					word += line[i + 1];
+					i++;
+					continue;
+				}
 			}
+			else if (!singleQuote)
+			{
+				// outside quotes: escape everything
+				if (i + 1 < line.size())
+				{
+					word += line[i + 1];
+					i++;
+					continue;
+				}
+			}
+
+			// sonst: literal backslash
+			word += '\\';
 			continue;
 		}
 
