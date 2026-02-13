@@ -133,6 +133,7 @@ int Shell::run() {
 		// Echo Command
 		else if (words[0] == "echo")
 		{
+			/*
 			// Check if the Second argument is
 			// > or 1> to write to a File
 			if (words[2] == ">")
@@ -172,6 +173,7 @@ int Shell::run() {
 				// Skip here
 				continue;
 			}
+			*/
 
 			std::string output = "";
 
