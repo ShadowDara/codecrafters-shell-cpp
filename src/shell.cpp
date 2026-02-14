@@ -115,6 +115,22 @@ int Shell::run() {
 
 		words = parseLine(input);
 
+		bool saveIntoFile = false;
+		std::string lastarg = "";
+		//std::ofstream file;
+
+		for (size_t i = 0; i < words.size(); i++)
+		{
+			if (lastarg == ">")
+			{
+				// Create ofstream for the File
+				// 
+				// Save i
+			}
+
+			lastarg = words[i];
+		}
+
 		/*for (const auto& w : words) {
 			std::cout << w << std::endl;
 		}*/
