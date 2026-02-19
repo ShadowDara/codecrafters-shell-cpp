@@ -115,20 +115,37 @@ int Shell::run() {
 
 		words = parseLine(input);
 
-		bool saveIntoFile = false;
-		std::string lastarg = "";
-		//std::ofstream file;
+		// Redirection Handling
+		bool redirect = false;
+		std::string filename;
 
 		for (size_t i = 0; i < words.size(); i++)
 		{
-			if (lastarg == ">")
+			if (words[i] == ">" || words[i] == "1>")
 			{
-				// Create ofstream for the File
-				// 
-				// Save i
-			}
+				redirect = true;
 
-			lastarg = words[i];
+				if (i + 1 < words.size())
+				{
+					filename = words[i + 1];
+				}
+
+				// Entferne > und filename aus Argumentliste
+				words.erase(words.begin() + i, words.begin() + i + 2);
+				break;
+			}
+		}
+
+		// Output Redirection
+
+		std::ofstream outfile;
+		std::streambuf* oldCoutBuf = nullptr;
+
+		if (redirect)
+		{
+			outfile.open(filename); // überschreibt automatisch
+			oldCoutBuf = std::cout.rdbuf();
+			std::cout.rdbuf(outfile.rdbuf());
 		}
 
 		/*for (const auto& w : words) {
@@ -255,6 +272,13 @@ int Shell::run() {
 		else
 		{
 			std::cout << input << ": command not found\n";
+		}
+
+		// Reset Redirection
+		if (redirect)
+		{
+			std::cout.rdbuf(oldCoutBuf);
+			outfile.close();
 		}
 	}
 
