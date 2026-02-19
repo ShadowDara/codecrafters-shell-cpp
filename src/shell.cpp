@@ -160,54 +160,32 @@ int Shell::run() {
 		// Echo Command
 		else if (words[0] == "echo")
 		{
-			/*
-			// Check if the Second argument is
-			// > or 1> to write to a File
-			if (words[2] == ">")
-			{ 
-				std::string filename = words[3];
-				std::ofstream file(filename);
-
-				if (!file)
+			if (redirect)
+			{
+				std::ofstream outfile(filename);
+				if (!outfile)
 				{
 					std::cerr << "Fehler beim Öffnen der Datei\n";
-					return 1;
+					continue;
 				}
 
-				file << words[1];
-
-				file.close();
-
-				// Skip here
-				continue;
-			}
-			
-			if (words[2] == "1>")
-			{
-				std::string filename = words[3];
-				std::ofstream file(filename);
-
-				if (!file)
+				for (size_t i = 1; i < words.size(); i++)
 				{
-					std::cerr << "Fehler beim Öffnen der Datei\n";
-					return 1;
+					outfile << words[i];
+					if (i + 1 < words.size()) outfile << " ";
 				}
-
-				file << words[1];
-
-				file.close();
-
-				// Skip here
-				continue;
+				outfile << std::endl;
+				// NICHTS auf std::cout schreiben!
 			}
-			*/
-
-			for (size_t i = 1; i < words.size(); i++)
+			else
 			{
-				std::cout << words[i];
-				if (i + 1 < words.size()) std::cout << " ";
+				for (size_t i = 1; i < words.size(); i++)
+				{
+					std::cout << words[i];
+					if (i + 1 < words.size()) std::cout << " ";
+				}
+				std::cout << std::endl;
 			}
-			std::cout << std::endl; // newline am Ende
 		}
 
 		// View the current Directory
