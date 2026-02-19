@@ -106,7 +106,7 @@ int Shell::run() {
 	// TODO: Uncomment the code below to pass the first stage
 	while (true)
 	{
-		std::cout << "$ ";
+		std::cout << "$ " << std::flush;
 
 		std::string input;
 		std::getline(std::cin, input);
