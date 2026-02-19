@@ -154,34 +154,35 @@ bool runProcess(const std::vector<std::string>& args,
 
     pid_t pid = fork();
 
-    if (pid == 0)  // Child
+    if (pid == 0) // Child
     {
         if (redirect)
         {
-            int fd = open(filename.c_str(),
-                O_WRONLY | O_CREAT | O_TRUNC,
-                0644);
-
-            if (fd < 0)
-            {
-                perror("open failed");
-                exit(1);
-            }
-
-            dup2(fd, STDOUT_FILENO);  // 🔥 Umleitung passiert hier
+            int fd = open(filename.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (fd < 0) { perror("open failed"); exit(1); }
+            dup2(fd, STDOUT_FILENO);
             close(fd);
         }
 
         std::vector<char*> c_args;
-        for (const auto& arg : args)
+        for (auto& arg : args)
             c_args.push_back(const_cast<char*>(arg.c_str()));
-
         c_args.push_back(nullptr);
 
         execvp(c_args[0], c_args.data());
-
         perror("exec failed");
         exit(1);
+    }
+    else if (pid > 0) // Parent
+    {
+        int status;
+        waitpid(pid, &status, 0);
+        return true;
+    }
+    else
+    {
+        perror("fork failed");
+        return false;
     }
 
 #endif
