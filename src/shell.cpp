@@ -119,6 +119,12 @@ int Shell::run() {
 		bool redirect = false;
 		std::string filename;
 
+		// Check for Empty
+		if (words.empty())
+		{ 
+			continue;
+		}
+
 		for (size_t i = 0; i < words.size(); i++)
 		{
 			if (words[i] == ">" || words[i] == "1>")
