@@ -97,8 +97,7 @@ std::string getExecutablePath(std::string command)
 
 
 bool runProcess(const std::vector<std::string>& args,
-    bool redirect = false,
-    const std::string& filename = "")
+    bool redirect, const std::string& filename)
 {
 #ifdef _WIN32
 
