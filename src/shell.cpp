@@ -117,6 +117,7 @@ int Shell::run() {
 
 		// Redirection Handling
 		bool redirect = false;
+		bool redirectStderr = false;
 		std::string filename;
 
 		// Check for Empty
@@ -127,6 +128,7 @@ int Shell::run() {
 
 		for (size_t i = 0; i < words.size(); i++)
 		{
+			// Redirecting stdout to a file
 			if (words[i] == ">" || words[i] == "1>")
 			{
 				redirect = true;
@@ -140,16 +142,26 @@ int Shell::run() {
 				words.erase(words.begin() + i, words.begin() + i + 2);
 				break;
 			}
+
+			// Redirecting stderr to a file
+			else if (words[i] == "2>")
+			{
+				redirectStderr = true;
+
+				if (i + 1 < words.size())
+				{
+					filename = words[i + 1];
+				}
+
+				// Entferne 2> und filename aus Argumentliste
+				words.erase(words.begin() + i, words.begin() + i + 2);
+				break;
+			}
 		}
 
 		/*for (const auto& w : words) {
 			std::cout << w << std::endl;
 		}*/
-
-		//
-		// TODO
-		// Parser for " and '
-		//
 
 		// Leave the Shell
 		if (words[0] == "exit")
@@ -176,6 +188,22 @@ int Shell::run() {
 				}
 				outfile << std::endl;
 				// NICHTS auf std::cout schreiben!
+			}
+			else if (redirectStderr)
+			{
+				std::ofstream outfile(filename);
+				if (!outfile)
+				{
+					std::cerr << "Fehler beim Öffnen der Datei\n";
+					continue;
+				}
+				for (size_t i = 1; i < words.size(); i++)
+				{
+					outfile << words[i];
+					if (i + 1 < words.size()) outfile << " ";
+				}
+				outfile << std::endl;
+				// NICHTS auf std::cerr schreiben!
 			}
 			else
 			{
