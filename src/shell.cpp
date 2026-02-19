@@ -202,16 +202,12 @@ int Shell::run() {
 			}
 			*/
 
-			std::string output = "";
-
 			for (size_t i = 1; i < words.size(); i++)
 			{
-				output += words[i] + " ";
+				std::cout << words[i];
+				if (i + 1 < words.size()) std::cout << " ";
 			}
-
-			output += "\n";
-
-			std::cout << output;
+			std::cout << std::endl; // newline am Ende
 		}
 
 		// View the current Directory
