@@ -1,4 +1,4 @@
-#include "backend.hpp"
+﻿#include "backend.hpp"
 
 
 bool hasExtension(const std::string& cmd)
@@ -96,7 +96,9 @@ std::string getExecutablePath(std::string command)
 }
 
 
-bool runProcess(const std::vector<std::string>& args)
+bool runProcess(const std::vector<std::string>& args,
+    bool redirect = false,
+    const std::string& filename = "")
 {
 #ifdef _WIN32
 
@@ -142,8 +144,23 @@ bool runProcess(const std::vector<std::string>& args)
 
     if (pid == 0)  // Child
     {
-        std::vector<char*> c_args;
+        if (redirect)
+        {
+            int fd = open(filename.c_str(),
+                O_WRONLY | O_CREAT | O_TRUNC,
+                0644);
 
+            if (fd < 0)
+            {
+                perror("open failed");
+                exit(1);
+            }
+
+            dup2(fd, STDOUT_FILENO);  // 🔥 Umleitung passiert hier
+            close(fd);
+        }
+
+        std::vector<char*> c_args;
         for (const auto& arg : args)
             c_args.push_back(const_cast<char*>(arg.c_str()));
 
@@ -153,17 +170,6 @@ bool runProcess(const std::vector<std::string>& args)
 
         perror("exec failed");
         exit(1);
-    }
-    else if (pid > 0)  // Parent
-    {
-        int status;
-        waitpid(pid, &status, 0);
-        return true;
-    }
-    else
-    {
-        perror("fork failed");
-        return false;
     }
 
 #endif
