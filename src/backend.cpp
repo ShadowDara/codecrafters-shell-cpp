@@ -112,31 +112,44 @@ bool runProcess(const std::vector<std::string>& args,
     STARTUPINFOA si = { sizeof(si) };
     PROCESS_INFORMATION pi;
 
+    HANDLE hFile = NULL;
+
+    if (redirect)
+    {
+        hFile = CreateFileA(
+            filename.c_str(),
+            GENERIC_WRITE,
+            FILE_SHARE_READ,
+            NULL,
+            CREATE_ALWAYS,
+            FILE_ATTRIBUTE_NORMAL,
+            NULL
+        );
+
+        if (hFile == INVALID_HANDLE_VALUE)
+        {
+            std::cerr << "File open failed\n";
+            return false;
+        }
+
+        si.dwFlags |= STARTF_USESTDHANDLES;
+        si.hStdOutput = hFile;
+        si.hStdError = GetStdHandle(STD_ERROR_HANDLE); // stderr bleibt
+        si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+    }
+
     BOOL success = CreateProcessA(
         NULL,
-        commandLine.data(),  // mutable!
+        commandLine.data(),
         NULL,
         NULL,
-        FALSE,
+        TRUE,  // <-- wichtig für Handle inheritance
         0,
         NULL,
         NULL,
         &si,
         &pi
     );
-
-    if (!success)
-    {
-        std::cerr << "CreateProcess failed\n";
-        return false;
-    }
-
-    WaitForSingleObject(pi.hProcess, INFINITE);
-
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
-
-    return true;
 
 #else
 

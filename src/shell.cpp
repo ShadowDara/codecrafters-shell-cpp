@@ -136,18 +136,6 @@ int Shell::run() {
 			}
 		}
 
-		// Output Redirection
-
-		std::ofstream outfile;
-		std::streambuf* oldCoutBuf = nullptr;
-
-		if (redirect)
-		{
-			outfile.open(filename); // überschreibt automatisch
-			oldCoutBuf = std::cout.rdbuf();
-			std::cout.rdbuf(outfile.rdbuf());
-		}
-
 		/*for (const auto& w : words) {
 			std::cout << w << std::endl;
 		}*/
@@ -265,20 +253,13 @@ int Shell::run() {
 		else if (checkInPath(words[0]))
 		{
 			// Run the Executable
-			runProcess(words);
+			runProcess(words, redirect, filename);
 		}
 
 		// Default
 		else
 		{
 			std::cout << input << ": command not found\n";
-		}
-
-		// Reset Redirection
-		if (redirect)
-		{
-			std::cout.rdbuf(oldCoutBuf);
-			outfile.close();
 		}
 	}
 
