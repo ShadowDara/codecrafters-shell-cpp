@@ -96,24 +96,23 @@ std::string getExecutablePath(std::string command)
 }
 
 
-bool runProcess(const std::vector<std::string>& args,
-    bool redirect, const std::string& filename)
+bool runProcess(
+    const std::vector<std::string>& args,
+    bool redirect,
+    bool redirectStderr,
+    const std::string& filename)
 {
 #ifdef _WIN32
-
     std::string commandLine;
-
     for (const auto& arg : args)
-    {
         commandLine += "\"" + arg + "\" ";
-    }
 
     STARTUPINFOA si = { sizeof(si) };
     PROCESS_INFORMATION pi;
 
     HANDLE hFile = NULL;
 
-    if (redirect)
+    if (redirect || redirectStderr)
     {
         hFile = CreateFileA(
             filename.c_str(),
@@ -132,8 +131,8 @@ bool runProcess(const std::vector<std::string>& args,
         }
 
         si.dwFlags |= STARTF_USESTDHANDLES;
-        si.hStdOutput = hFile;
-        si.hStdError = GetStdHandle(STD_ERROR_HANDLE); // stderr bleibt
+        si.hStdOutput = (redirect ? hFile : GetStdHandle(STD_OUTPUT_HANDLE));
+        si.hStdError = (redirectStderr ? hFile : GetStdHandle(STD_ERROR_HANDLE));
         si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
     }
 
@@ -142,7 +141,7 @@ bool runProcess(const std::vector<std::string>& args,
         commandLine.data(),
         NULL,
         NULL,
-        TRUE,  // <-- wichtig für Handle inheritance
+        TRUE, // Handle inheritance
         0,
         NULL,
         NULL,
@@ -150,8 +149,21 @@ bool runProcess(const std::vector<std::string>& args,
         &pi
     );
 
-#else
+    if (!success)
+    {
+        std::cerr << "CreateProcess failed\n";
+        if (hFile) CloseHandle(hFile);
+        return false;
+    }
 
+    WaitForSingleObject(pi.hProcess, INFINITE);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+    if (hFile) CloseHandle(hFile);
+
+    return true;
+
+#else
     pid_t pid = fork();
 
     if (pid == 0) // Child
@@ -161,6 +173,15 @@ bool runProcess(const std::vector<std::string>& args,
             int fd = open(filename.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
             if (fd < 0) { perror("open failed"); exit(1); }
             dup2(fd, STDOUT_FILENO);
+            if (redirectStderr)
+                dup2(fd, STDERR_FILENO); // stderr auch umleiten
+            close(fd);
+        }
+        else if (redirectStderr)
+        {
+            int fd = open(filename.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (fd < 0) { perror("open failed"); exit(1); }
+            dup2(fd, STDERR_FILENO);
             close(fd);
         }
 
@@ -184,7 +205,6 @@ bool runProcess(const std::vector<std::string>& args,
         perror("fork failed");
         return false;
     }
-
 #endif
 }
 

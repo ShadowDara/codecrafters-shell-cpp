@@ -159,10 +159,6 @@ int Shell::run() {
 			}
 		}
 
-		/*for (const auto& w : words) {
-			std::cout << w << std::endl;
-		}*/
-
 		// Leave the Shell
 		if (words[0] == "exit")
 		{
