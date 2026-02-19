@@ -100,8 +100,8 @@ std::vector<std::string> Shell::parseLine(std::string line)
 // Shell Function
 int Shell::run() {
 	// Flush after every std::cout / std:cerr
-	//std::cout << std::unitbuf;
-	//std::cerr << std::unitbuf;
+	std::cout << std::unitbuf;
+	std::cerr << std::unitbuf;
 
 	// TODO: Uncomment the code below to pass the first stage
 	while (true)
