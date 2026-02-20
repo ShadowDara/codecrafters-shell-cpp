@@ -212,6 +212,31 @@ int Shell::run() {
 				outfile << std::endl;
 			}
 
+			// Append Stdout
+			else if (appendStdout)
+			{
+				// Ensure parent directory exists
+				fs::path filePath(filename);
+				if (!fs::exists(filePath.parent_path()))
+				{
+					fs::create_directories(filePath.parent_path());
+				}
+
+				std::ofstream outfile(filename, std::ios::app); // <-- append mode
+				if (!outfile)
+				{
+					std::cerr << "Fehler beim Öffnen der Datei\n";
+					continue;
+				}
+
+				for (size_t i = 1; i < words.size(); i++)
+				{
+					outfile << words[i];
+					if (i + 1 < words.size()) outfile << " ";
+				}
+				outfile << std::endl;
+			}
+
 			// NOT redirecting, just echo to stdout
 			else
 			{
