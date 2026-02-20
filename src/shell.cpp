@@ -221,6 +221,11 @@ int Shell::run() {
 		// Change Directory
 		else if (words[0] == "cd")
 		{
+			if (words.size() < 2)
+			{
+				continue; // nichts tun
+			}
+
 			if (words[1] == "~")
 			{
 				changeToHome();
