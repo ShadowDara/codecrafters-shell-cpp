@@ -164,7 +164,7 @@ int Shell::run() {
 			}
 
 			// Append stdout to a file
-			if (words[i] == ">>")
+			if (words[i] == ">>" || words[i] == "1>>")
 			{
 				appendStdout = true;
 
