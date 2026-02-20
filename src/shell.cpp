@@ -185,12 +185,12 @@ int Shell::run() {
 				outfile << std::endl;
 				// NICHTS auf std::cout schreiben!
 			}
-			else if (redirectStderr)
-			{
-				// NICHTS auf std::cerr schreiben!
-				// std::cout should be written as normal,
-				// only std::cerr should be redirected
-			}
+			//else if (redirectStderr)
+			//{
+			//	// NICHTS auf std::cerr schreiben!
+			//	// std::cout should be written as normal,
+			//	// only std::cerr should be redirected
+			//}
 			else
 			{
 				for (size_t i = 1; i < words.size(); i++)
