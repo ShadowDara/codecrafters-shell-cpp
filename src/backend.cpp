@@ -168,7 +168,7 @@ bool runProcess(
 
     if (pid == 0) // Child
     {
-        if (redirect)
+        if (redirectStdout)
         {
             int fd = open(filename.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
             if (fd < 0) { perror("open failed"); exit(1); }
