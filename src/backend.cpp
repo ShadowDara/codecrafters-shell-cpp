@@ -100,6 +100,8 @@ bool runProcess(
     const std::vector<std::string>& args,
     bool redirectStdout,
     bool redirectStderr,
+    bool appendStdout,
+    bool appendStderr,
     const std::string& filename)
 {
 #ifdef _WIN32
@@ -168,9 +170,18 @@ bool runProcess(
 
     if (pid == 0) // Child
     {
+        if (appendStdout)
+        {
+            flags |= O_APPEND;
+        }
+        else
+        { 
+            flags |= O_TRUNC;
+        }
+
         if (redirectStdout)
         {
-            int fd = open(filename.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            int fd = open(filename.c_str(), flags, 0644);
             if (fd < 0) { perror("open failed"); exit(1); }
             dup2(fd, STDOUT_FILENO);
             if (redirectStderr)
@@ -179,7 +190,7 @@ bool runProcess(
         }
         else if (redirectStderr)
         {
-            int fd = open(filename.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            int fd = open(filename.c_str(), flags, 0644);
             if (fd < 0) { perror("open failed"); exit(1); }
             dup2(fd, STDERR_FILENO);
             close(fd);

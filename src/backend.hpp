@@ -36,6 +36,8 @@ std::string getExecutablePath(std::string command);
 bool runProcess(const std::vector<std::string>& args,
 	bool redirectStdout = false,
 	bool redirectStderr = false,
+	bool appendStdout = false,
+	bool appendStderr = false,
 	const std::string& filename = "");
 
 // Function to change the current Directory,
