@@ -213,7 +213,7 @@ int Shell::run() {
 
 				for (size_t i = 1; i < words.size(); i++)
 				{
-					outfile << words[i];
+					std::cout << words[i];
 					if (i + 1 < words.size()) std::cout << " ";
 				}
 				std::cout << std::endl;
