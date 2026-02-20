@@ -1,5 +1,6 @@
 #include "shell.hpp"
 
+namespace fs = std::filesystem;
 
 // Function to parse the Input Line
 std::vector<std::string> Shell::parseLine(std::string line)
@@ -170,6 +171,13 @@ int Shell::run() {
 		{
 			if (redirect)
 			{
+				// Ensure parent directory exists
+				fs::path filePath(filename);
+				if (!fs::exists(filePath.parent_path()))
+				{
+					fs::create_directories(filePath.parent_path());
+				}
+
 				std::ofstream outfile(filename);
 				if (!outfile)
 				{
@@ -183,7 +191,6 @@ int Shell::run() {
 					if (i + 1 < words.size()) outfile << " ";
 				}
 				outfile << std::endl;
-				// NICHTS auf std::cout schreiben!
 			}
 			//else if (redirectStderr)
 			//{
