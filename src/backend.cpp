@@ -170,6 +170,8 @@ bool runProcess(
 
     if (pid == 0) // Child
     {
+        int flags = O_WRONLY | O_CREAT;
+
         if (appendStdout)
         {
             flags |= O_APPEND;
