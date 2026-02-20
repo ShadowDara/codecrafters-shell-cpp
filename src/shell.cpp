@@ -117,8 +117,12 @@ int Shell::run() {
 		words = parseLine(input);
 
 		// Redirection Handling
-		bool redirect = false;
+		bool redirectStdout = false;
 		bool redirectStderr = false;
+		bool appendStdout = false;
+		bool appendStderr = false;
+
+		// Filename for redirection
 		std::string filename;
 
 		// Check for Empty
@@ -132,7 +136,7 @@ int Shell::run() {
 			// Redirecting stdout to a file
 			if (words[i] == ">" || words[i] == "1>")
 			{
-				redirect = true;
+				redirectStdout = true;
 
 				if (i + 1 < words.size())
 				{
@@ -145,7 +149,7 @@ int Shell::run() {
 			}
 
 			// Redirecting stderr to a file
-			else if (words[i] == "2>")
+			if (words[i] == "2>")
 			{
 				redirectStderr = true;
 
@@ -155,6 +159,21 @@ int Shell::run() {
 				}
 
 				// Entferne 2> und filename aus Argumentliste
+				words.erase(words.begin() + i, words.begin() + i + 2);
+				break;
+			}
+
+			// Append stdout to a file
+			if (words[i] == ">>")
+			{
+				appendStdout = true;
+
+				if (i + 1 < words.size())
+				{
+					filename = words[i + 1];
+				}
+
+				// Entferne >> und filename aus Argumentliste
 				words.erase(words.begin() + i, words.begin() + i + 2);
 				break;
 			}
@@ -169,7 +188,7 @@ int Shell::run() {
 		// Echo Command
 		else if (words[0] == "echo")
 		{
-			if (redirect)
+			if (redirectStdout)
 			{
 				// Ensure parent directory exists
 				fs::path filePath(filename);
@@ -193,33 +212,27 @@ int Shell::run() {
 				outfile << std::endl;
 			}
 
-			// Inside your echo redirection code
-			else if (redirectStderr)
-			{
-				fs::path filePath(filename);
-
-				// Create parent directories if they don't exist
-				if (!filePath.parent_path().empty() && !fs::exists(filePath.parent_path()))
-				{
-					fs::create_directories(filePath.parent_path());
-				}
-
-				std::ofstream outfile(filename);
-				if (!outfile)
-				{
-					std::cerr << "Fehler beim Öffnen der Datei\n";
-					continue;
-				}
-
-				for (size_t i = 1; i < words.size(); i++)
-				{
-					std::cout << words[i];
-					if (i + 1 < words.size()) std::cout << " ";
-				}
-				std::cout << std::endl;
-			}
+			// NOT redirecting, just echo to stdout
 			else
 			{
+				// Inside your echo redirection code
+				if (redirectStderr)
+				{
+					fs::path filePath(filename);
+
+					// Create parent directories if they don't exist
+					if (!filePath.parent_path().empty() && !fs::exists(filePath.parent_path()))
+					{
+						fs::create_directories(filePath.parent_path());
+					}
+
+					std::ofstream outfile(filename);
+					if (!outfile)
+					{
+						std::cerr << "Fehler beim Öffnen der Datei\n";
+						continue;
+					}
+				}
 				for (size_t i = 1; i < words.size(); i++)
 				{
 					std::cout << words[i];
@@ -279,7 +292,7 @@ int Shell::run() {
 		else if (checkInPath(words[0]))
 		{
 			// Run the Executable
-			runProcess(words, redirect, redirectStderr, filename);
+			runProcess(words, redirectStdout, redirectStderr, filename);
 		}
 
 		// Default

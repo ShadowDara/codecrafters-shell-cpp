@@ -34,7 +34,7 @@ std::string getExecutablePath(std::string command);
 // Start a Process with the given Arguments, returns true if successful
 // For Linux and Windows
 bool runProcess(const std::vector<std::string>& args,
-	bool redirect = false,
+	bool redirectStdout = false,
 	bool redirectStderr = false,
 	const std::string& filename = "");
 

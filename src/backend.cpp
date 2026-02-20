@@ -98,7 +98,7 @@ std::string getExecutablePath(std::string command)
 
 bool runProcess(
     const std::vector<std::string>& args,
-    bool redirect,
+    bool redirectStdout,
     bool redirectStderr,
     const std::string& filename)
 {
@@ -112,7 +112,7 @@ bool runProcess(
 
     HANDLE hFile = NULL;
 
-    if (redirect || redirectStderr)
+    if (redirectStdout || redirectStderr)
     {
         hFile = CreateFileA(
             filename.c_str(),
@@ -131,7 +131,7 @@ bool runProcess(
         }
 
         si.dwFlags |= STARTF_USESTDHANDLES;
-        si.hStdOutput = (redirect ? hFile : GetStdHandle(STD_OUTPUT_HANDLE));
+        si.hStdOutput = (redirectStdout ? hFile : GetStdHandle(STD_OUTPUT_HANDLE));
         si.hStdError = (redirectStderr ? hFile : GetStdHandle(STD_ERROR_HANDLE));
         si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
     }
