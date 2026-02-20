@@ -174,14 +174,16 @@ bool runProcess(
 
         if (appendStdout)
         {
+			// Append to the file if appending
             flags |= O_APPEND;
         }
         else
         { 
+			// Rewrite the file if not appending
             flags |= O_TRUNC;
         }
 
-        if (redirectStdout)
+        if (redirectStdout || appendStdout)
         {
             int fd = open(filename.c_str(), flags, 0644);
             if (fd < 0) { perror("open failed"); exit(1); }
@@ -190,7 +192,7 @@ bool runProcess(
                 dup2(fd, STDERR_FILENO); // stderr auch umleiten
             close(fd);
         }
-        else if (redirectStderr)
+        else if (redirectStderr || appendStderr)
         {
             int fd = open(filename.c_str(), flags, 0644);
             if (fd < 0) { perror("open failed"); exit(1); }
