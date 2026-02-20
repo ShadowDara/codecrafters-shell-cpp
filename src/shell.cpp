@@ -177,6 +177,21 @@ int Shell::run() {
 				words.erase(words.begin() + i, words.begin() + i + 2);
 				break;
 			}
+
+			// Append stderr to a file
+			if (words[i] == "2>>")
+			{
+				appendStderr = true;
+
+				if (i + 1 < words.size())
+				{
+					filename = words[i + 1];
+				}
+
+				// Entferne 2>> und filename aus Argumentliste
+				words.erase(words.begin() + i, words.begin() + i + 2);
+				break;
+			}
 		}
 
 		// Leave the Shell
