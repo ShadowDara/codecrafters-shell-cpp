@@ -200,6 +200,7 @@ int Shell::run() {
 			break;
 		}
 
+#pragma region echo
 		// Echo Command
 		else if (words[0] == "echo")
 		{
@@ -272,7 +273,28 @@ int Shell::run() {
 						std::cerr << "Fehler beim Öffnen der Datei\n";
 						continue;
 					}
+				} 
+
+				// Append to the file if appending
+				else if (appendStderr)
+				{
+					fs::path filePath(filename);
+
+					// Create parent directories if they don't exist
+					if (!filePath.parent_path().empty() && !fs::exists(filePath.parent_path()))
+					{
+						fs::create_directories(filePath.parent_path());
+					}
+
+					std::ofstream outfile(filename, std::ios::app); // <-- append mode
+					if (!outfile)
+					{
+						std::cerr << "Fehler beim Öffnen der Datei\n";
+						continue;
+					}
 				}
+
+				// Write normal Output to the console
 				for (size_t i = 1; i < words.size(); i++)
 				{
 					std::cout << words[i];
@@ -281,6 +303,7 @@ int Shell::run() {
 				std::cout << std::endl;
 			}
 		}
+#pragma endregion
 
 		// View the current Directory
 		else if (words[0] == "pwd")
