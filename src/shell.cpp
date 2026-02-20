@@ -187,19 +187,9 @@ int Shell::run() {
 			}
 			else if (redirectStderr)
 			{
-				std::ofstream outfile(filename);
-				if (!outfile)
-				{
-					std::cerr << "Fehler beim Öffnen der Datei\n";
-					continue;
-				}
-				for (size_t i = 1; i < words.size(); i++)
-				{
-					outfile << words[i];
-					if (i + 1 < words.size()) outfile << " ";
-				}
-				outfile << std::endl;
 				// NICHTS auf std::cerr schreiben!
+				// std::cout should be written as normal,
+				// only std::cerr should be redirected
 			}
 			else
 			{
