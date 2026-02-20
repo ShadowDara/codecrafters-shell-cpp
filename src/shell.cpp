@@ -192,12 +192,32 @@ int Shell::run() {
 				}
 				outfile << std::endl;
 			}
-			//else if (redirectStderr)
-			//{
-			//	// NICHTS auf std::cerr schreiben!
-			//	// std::cout should be written as normal,
-			//	// only std::cerr should be redirected
-			//}
+
+			// Inside your echo redirection code
+			else if (redirectStderr)
+			{
+				fs::path filePath(filename);
+
+				// Create parent directories if they don't exist
+				if (!filePath.parent_path().empty() && !fs::exists(filePath.parent_path()))
+				{
+					fs::create_directories(filePath.parent_path());
+				}
+
+				std::ofstream outfile(filename);
+				if (!outfile)
+				{
+					std::cerr << "Fehler beim Öffnen der Datei\n";
+					continue;
+				}
+
+				for (size_t i = 1; i < words.size(); i++)
+				{
+					outfile << words[i];
+					if (i + 1 < words.size()) std::cout << " ";
+				}
+				std::cout << std::endl;
+			}
 			else
 			{
 				for (size_t i = 1; i < words.size(); i++)
