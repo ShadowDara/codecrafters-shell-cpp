@@ -317,7 +317,8 @@ int Shell::run() {
 		else if (checkInPath(words[0]))
 		{
 			// Run the Executable
-			runProcess(words, redirectStdout, redirectStderr, filename);
+			runProcess(words,redirectStdout, redirectStderr,
+				appendStdout, appendStderr, filename);
 		}
 
 		// Default
