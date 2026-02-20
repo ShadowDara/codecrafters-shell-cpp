@@ -2,6 +2,8 @@
 
 namespace fs = std::filesystem;
 
+#pragma region LineParser
+
 // Function to parse the Input Line
 std::vector<std::string> Shell::parseLine(std::string line)
 {
@@ -97,6 +99,7 @@ std::vector<std::string> Shell::parseLine(std::string line)
 	return tokens;
 }
 
+#pragma endregion
 
 // Shell Function
 int Shell::run() {

@@ -170,32 +170,22 @@ bool runProcess(
 
     if (pid == 0) // Child
     {
-        int flags = O_WRONLY | O_CREAT;
-
-        if (appendStdout)
-        {
-			// Append to the file if appending
-            flags |= O_APPEND;
-        }
-        else
-        { 
-			// Rewrite the file if not appending
-            flags |= O_TRUNC;
-        }
-
         if (redirectStdout || appendStdout)
         {
+            int flags = O_WRONLY | O_CREAT;
+            flags |= appendStdout ? O_APPEND : O_TRUNC;
+
             int fd = open(filename.c_str(), flags, 0644);
-            if (fd < 0) { perror("open failed"); exit(1); }
             dup2(fd, STDOUT_FILENO);
-            if (redirectStderr)
-                dup2(fd, STDERR_FILENO); // stderr auch umleiten
             close(fd);
         }
-        else if (redirectStderr || appendStderr)
+
+        if (redirectStderr || appendStderr)
         {
+            int flags = O_WRONLY | O_CREAT;
+            flags |= appendStderr ? O_APPEND : O_TRUNC;
+
             int fd = open(filename.c_str(), flags, 0644);
-            if (fd < 0) { perror("open failed"); exit(1); }
             dup2(fd, STDERR_FILENO);
             close(fd);
         }
