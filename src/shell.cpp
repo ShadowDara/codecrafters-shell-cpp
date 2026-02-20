@@ -200,7 +200,7 @@ int Shell::run() {
 			break;
 		}
 
-#pragma region echo
+//#pragma region echo
 		// Echo Command
 		else if (words[0] == "echo")
 		{
@@ -303,7 +303,7 @@ int Shell::run() {
 				std::cout << std::endl;
 			}
 		}
-#pragma endregion
+//#pragma endregion
 
 		// View the current Directory
 		else if (words[0] == "pwd")
