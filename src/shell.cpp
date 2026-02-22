@@ -10,13 +10,24 @@ namespace fs = std::filesystem;
 
 std::vector<std::string> builtins = { "echo", "exit" };
 
+std::vector<std::string> getPathDirs()
+{
+	std::vector<std::string> dirs;
+	
+}
+
 // Hilfsfunktion: gibt die vervollst�ndigte Erg�nzung zur�ck
 std::string tryAutocomplete(const std::string& input) {
+	// Complete for CMD Buildins
 	for (auto& cmd : builtins) {
 		if (cmd.find(input) == 0) {
 			return cmd.substr(input.size()); // nur den Rest zur�ckgeben
 		}
 	}
+
+	// Complete for executables
+
+
 	return "";
 }
 

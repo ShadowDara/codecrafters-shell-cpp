@@ -38,7 +38,8 @@ bool runProcess(const std::vector<std::string>& args,
 	bool redirectStderr = false,
 	bool appendStdout = false,
 	bool appendStderr = false,
-	const std::string& filename = "");
+	const std::string& filename = ""
+);
 
 // Function to change the current Directory,
 // returns true if successful
