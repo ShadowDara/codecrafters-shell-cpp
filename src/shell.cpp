@@ -10,11 +10,11 @@ namespace fs = std::filesystem;
 
 std::vector<std::string> builtins = { "echo", "exit" };
 
-// Hilfsfunktion: gibt die vervollständigte Ergänzung zurück
+// Hilfsfunktion: gibt die vervollstï¿½ndigte Ergï¿½nzung zurï¿½ck
 std::string tryAutocomplete(const std::string& input) {
 	for (auto& cmd : builtins) {
 		if (cmd.find(input) == 0) {
-			return cmd.substr(input.size()); // nur den Rest zurückgeben
+			return cmd.substr(input.size()); // nur den Rest zurï¿½ckgeben
 		}
 	}
 	return "";
@@ -141,7 +141,7 @@ int Shell::run() {
 		std::string input;
 
 		// Read Input Character by Character in raw mode,
-		// um Backspace und TAB zu unterstützen
+		// um Backspace und TAB zu unterstï¿½tzen
 		while (true) {
 			char c;
 			if (read(STDIN_FILENO, &c, 1) <= 0) break;
@@ -160,7 +160,9 @@ int Shell::run() {
 				std::string completion = tryAutocomplete(input);
 				if (!completion.empty()) {
 					input += completion;
-					std::cout << completion << " " << std::flush; // Leerzeichen anhängen
+					std::cout << completion << " " << std::flush; // Leerzeichen anhï¿½ngen
+					// Add a Space to the Buffer
+					input += " ";
 				}
 			}
 			else {
@@ -279,7 +281,7 @@ int Shell::run() {
 				std::ofstream outfile(filename);
 				if (!outfile)
 				{
-					std::cerr << "Fehler beim Öffnen der Datei\n";
+					std::cerr << "Fehler beim ï¿½ffnen der Datei\n";
 					continue;
 				}
 
@@ -304,7 +306,7 @@ int Shell::run() {
 				std::ofstream outfile(filename, std::ios::app); // <-- append mode
 				if (!outfile)
 				{
-					std::cerr << "Fehler beim Öffnen der Datei\n";
+					std::cerr << "Fehler beim ï¿½ffnen der Datei\n";
 					continue;
 				}
 
@@ -333,7 +335,7 @@ int Shell::run() {
 					std::ofstream outfile(filename);
 					if (!outfile)
 					{
-						std::cerr << "Fehler beim Öffnen der Datei\n";
+						std::cerr << "Fehler beim ï¿½ffnen der Datei\n";
 						continue;
 					}
 				} 
@@ -352,7 +354,7 @@ int Shell::run() {
 					std::ofstream outfile(filename, std::ios::app); // <-- append mode
 					if (!outfile)
 					{
-						std::cerr << "Fehler beim Öffnen der Datei\n";
+						std::cerr << "Fehler beim ï¿½ffnen der Datei\n";
 						continue;
 					}
 				}
