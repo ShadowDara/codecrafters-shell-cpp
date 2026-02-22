@@ -158,11 +158,16 @@ int Shell::run() {
 			}
 			else if (c == '\t') { // TAB
 				std::string completion = tryAutocomplete(input);
-				if (!completion.empty()) {
+				if (!completion.empty())
+				{
 					input += completion;
 					std::cout << completion << " " << std::flush; // Leerzeichen anh�ngen
 					// Add a Space to the Buffer
 					input += " ";
+				}
+				else
+				{
+					std::cout << "\x07" << std::flush;
 				}
 			}
 			else {
