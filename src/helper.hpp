@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 // Available Commands in the Shell
 extern std::vector<std::string> Commands;
