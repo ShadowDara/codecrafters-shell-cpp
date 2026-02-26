@@ -203,7 +203,11 @@ int Shell::run() {
 			break;
 		}
 
+//
+// Why the tell does this break the compiler?
+//
 //#pragma region echo
+
 		// Echo Command
 		else if (words[0] == "echo")
 		{
