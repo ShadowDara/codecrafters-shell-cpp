@@ -15,6 +15,7 @@ std::vector<std::string> getPathDirs() {
     const char* pathEnv = std::getenv("PATH");
     if (!pathEnv) return dirs;
 
+	// Split the Whole string into an Array
     std::stringstream ss(pathEnv);
     std::string dir;
     while (std::getline(ss, dir, ':')) {
@@ -25,16 +26,21 @@ std::vector<std::string> getPathDirs() {
 
 std::string tryAutocompleteExternal(const std::string& input) {
     auto dirs = getPathDirs();
-    for (auto& dir : dirs) {
+    for (auto& dir : dirs)
+	{
         try {
             for (auto& entry : fs::directory_iterator(dir)) {
                 if (!entry.is_regular_file()) continue;
                 std::string name = entry.path().filename().string();
-                if (name.find(input) == 0) { // starts with input
+
+				// starts with input
+                if (name.find(input) == 0)
+				{
                     return name.substr(input.size());
                 }
             }
-        } catch (...) {
+        } catch (...)
+		{
             // ignore directories that don't exist
         }
     }
