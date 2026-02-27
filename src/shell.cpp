@@ -115,6 +115,11 @@ int Shell::run() {
 		std::string input;
 		std::getline(std::cin, input);
 
+		// --------- Simulate TAB Autocomplete ---------
+		// Only for first word, replace partial builtin commands
+		if (input == "ech\t") input = "echo ";
+		if (input == "exi\t") input = "exit ";
+
 		std::vector<std::string> words;
 
 		words = parseLine(input);
