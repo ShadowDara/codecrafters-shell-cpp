@@ -10,10 +10,35 @@ namespace fs = std::filesystem;
 
 std::vector<std::string> builtins = { "echo", "exit" };
 
-std::vector<std::string> getPathDirs()
-{
-	std::vector<std::string> dirs;
-	
+std::vector<std::string> getPathDirs() {
+    std::vector<std::string> dirs;
+    const char* pathEnv = std::getenv("PATH");
+    if (!pathEnv) return dirs;
+
+    std::stringstream ss(pathEnv);
+    std::string dir;
+    while (std::getline(ss, dir, ':')) {
+        dirs.push_back(dir);
+    }
+    return dirs;
+}
+
+std::string tryAutocompleteExternal(const std::string& input) {
+    auto dirs = getPathDirs();
+    for (auto& dir : dirs) {
+        try {
+            for (auto& entry : fs::directory_iterator(dir)) {
+                if (!entry.is_regular_file()) continue;
+                std::string name = entry.path().filename().string();
+                if (name.find(input) == 0) { // starts with input
+                    return name.substr(input.size());
+                }
+            }
+        } catch (...) {
+            // ignore directories that don't exist
+        }
+    }
+    return "";
 }
 
 // Hilfsfunktion: gibt die vervollst�ndigte Erg�nzung zur�ck
@@ -26,9 +51,7 @@ std::string tryAutocomplete(const std::string& input) {
 	}
 
 	// Complete for executables
-
-
-	return "";
+	return tryAutocompleteExternal(input);
 }
 
 #pragma region LineParser
