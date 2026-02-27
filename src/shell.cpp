@@ -1,6 +1,21 @@
 #include "shell.hpp"
 
+#include <termios.h>
+#include <unistd.h>
+
 namespace fs = std::filesystem;
+
+std::vector<std::string> builtins = { "echo", "exit" };
+
+// Hilfsfunktion: gibt die vervollständigte Ergänzung zurück
+std::string tryAutocomplete(const std::string& input) {
+	for (auto& cmd : builtins) {
+		if (cmd.find(input) == 0) {
+			return cmd.substr(input.size()); // nur den Rest zurückgeben
+		}
+	}
+	return "";
+}
 
 #pragma region LineParser
 
@@ -110,15 +125,45 @@ int Shell::run() {
 	// TODO: Uncomment the code below to pass the first stage
 	while (true)
 	{
-		std::cout << "$ ";
+		std::cout << "$ " << std::flush;
+
+		// --------- Termios Raw Mode Setup ---------
+		struct termios orig, raw;
+		tcgetattr(STDIN_FILENO, &orig);
+		raw = orig;
+		raw.c_lflag &= ~(ICANON | ECHO); // raw mode, keine Echoeingabe
+		tcsetattr(STDIN_FILENO, TCSANOW, &raw);
 
 		std::string input;
-		std::getline(std::cin, input);
 
-		// --------- Simulate TAB Autocomplete ---------
-		// Only for first word, replace partial builtin commands
-		if (input == "ech\t") input = "echo ";
-		if (input == "exi\t") input = "exit ";
+		while (true) {
+			char c;
+			if (read(STDIN_FILENO, &c, 1) <= 0) break;
+
+			if (c == '\n') { // Enter
+				std::cout << std::endl;
+				break;
+			}
+			else if (c == 127) { // Backspace
+				if (!input.empty()) {
+					input.pop_back();
+					std::cout << "\b \b" << std::flush;
+				}
+			}
+			else if (c == '\t') { // TAB
+				std::string completion = tryAutocomplete(input);
+				if (!completion.empty()) {
+					input += completion;
+					std::cout << completion << " " << std::flush; // Leerzeichen anhängen
+				}
+			}
+			else {
+				input += c;
+				std::cout << c << std::flush;
+			}
+		}
+
+		tcsetattr(STDIN_FILENO, TCSANOW, &orig); // restore normal mode
 
 		std::vector<std::string> words;
 
