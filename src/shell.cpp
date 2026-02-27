@@ -1,5 +1,8 @@
 #include "shell.hpp"
 
+// TODO
+// Make although for Windows, but for now only Linux
+
 #include <termios.h>
 #include <unistd.h>
 
@@ -134,8 +137,11 @@ int Shell::run() {
 		raw.c_lflag &= ~(ICANON | ECHO); // raw mode, keine Echoeingabe
 		tcsetattr(STDIN_FILENO, TCSANOW, &raw);
 
+		// Inout String
 		std::string input;
 
+		// Read Input Character by Character in raw mode,
+		// um Backspace und TAB zu unterstützen
 		while (true) {
 			char c;
 			if (read(STDIN_FILENO, &c, 1) <= 0) break;
